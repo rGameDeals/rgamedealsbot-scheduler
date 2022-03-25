@@ -9,8 +9,6 @@ import re
 import schedule
 import pymysql
 
-import Config
-
 os.environ['TZ'] = 'UTC'
 
 con = pymysql.connect(
