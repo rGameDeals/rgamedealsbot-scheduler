@@ -72,7 +72,7 @@ def runjob():
             submission.mod.spoiler()
             flairtime = str( int(time.time()))
             cursorObj = con.cursor()
-            cursorObj.execute('DELETE FROM schedules WHERE postid = %s", (row[1],))
+            cursorObj.execute('DELETE FROM schedules WHERE postid = %s', (row[1],))
             cursorObj.execute('INSERT INTO flairs(postid, flairtext, timeset) VALUES(%s,%s,%s)', (submission.id,submission.link_flair_text,flairtime)  )
             con.commit()
             submission.mod.flair(text='Expired', css_class='expired')
