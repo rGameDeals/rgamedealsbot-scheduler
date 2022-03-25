@@ -58,7 +58,7 @@ def runjob():
   cursorObj = con.cursor()
   cursorObj.execute('SELECT * FROM schedules WHERE schedtime <= %s ORDER BY schedtime DESC LIMIT 0,50;', (tm,))
   rows = cursorObj.fetchall()
-  if len(rows) is not 0:
+  if len(rows) != 0:
     for row in rows:
       submission = reddit.submission(row[1])
       #logging.info( submission.removed_by_category )
