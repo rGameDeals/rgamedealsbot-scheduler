@@ -51,6 +51,7 @@ logging.info("starting scheduler...")
 
 
 def runjob():
+  con.ping(reconnect=True)
   tm = str(int(time.time()))
   cursorObj = con.cursor()
   cursorObj.execute('SELECT * FROM schedules WHERE schedtime <= %s ORDER BY schedtime DESC LIMIT 0,50;', (tm,))
