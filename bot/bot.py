@@ -57,6 +57,7 @@ def runjob():
   cursorObj.execute('SELECT * FROM schedules WHERE schedtime <= %s ORDER BY schedtime DESC LIMIT 0,50;', (tm,))
   rows = cursorObj.fetchall()
   if len(rows) != 0:
+    logging("processing schedule for ? items",( len(rows),))
     for row in rows:
       submission = reddit.submission(row[1])
       #logging.info( submission.removed_by_category )
@@ -91,6 +92,7 @@ schedule.every(1).minutes.do(runjob)
 
 runjob()
 logging.info("starting bot....")
+
 while 1:
     schedule.run_pending()
     time.sleep(30)
