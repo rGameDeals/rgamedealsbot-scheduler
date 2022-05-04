@@ -61,6 +61,7 @@ def runjob():
     logging.info("processing schedule for " + cnt + " items.")
     for row in rows:
       submission = reddit.submission(row[1])
+      logging.info(submission.id + " - " + submission.title)
       #logging.info( submission.removed_by_category )
       if submission.removed_by_category is None and submission.author is not None and submission.banned_by is None:
        if submission.link_flair_text is None or ("preorder" not in submission.link_flair_text.lower() and "pre-order" not in submission.link_flair_text.lower() and "preorder" not in submission.title.lower() and "pre-order" not in submission.title.lower()):
