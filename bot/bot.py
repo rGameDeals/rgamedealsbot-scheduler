@@ -77,6 +77,9 @@ def runjob():
             submission.mod.flair(text='Expired', css_class='expired')
         else:
          logging.info("removing orphaned schedule")
+         cursorObj = con.cursor()
+         cursorObj.execute('DELETE FROM schedules WHERE postid = %s', (row[1],))
+         con.commit()
        else:
         cursorObj = con.cursor()
         cursorObj.execute('DELETE FROM schedules WHERE postid = %s', (row[1],))
