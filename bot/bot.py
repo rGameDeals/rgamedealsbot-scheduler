@@ -58,7 +58,7 @@ def runjob():
   rows = cursorObj.fetchall()
   if len(rows) != 0:
     cnt = str(len(rows))
-    logging("processing schedule for " cnt + " items.")
+    logging("processing schedule for " + cnt + " items.")
     for row in rows:
       submission = reddit.submission(row[1])
       #logging.info( submission.removed_by_category )
