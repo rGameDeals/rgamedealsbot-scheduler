@@ -90,6 +90,7 @@ def runjob():
 schedule.every(1).minutes.do(runjob)
 
 runjob()
+logging.info("starting bot....")
 while 1:
     schedule.run_pending()
     time.sleep(30)
