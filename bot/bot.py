@@ -11,6 +11,7 @@ import pymysql
 
 os.environ['TZ'] = 'UTC'
 
+
 con = pymysql.connect(
     host=os.environ['MYSQL_HOST'],
     user=os.environ['MYSQL_USER'],
