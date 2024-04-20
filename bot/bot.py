@@ -62,6 +62,7 @@ def runjob():
     logging.info("processing schedule for " + cnt + " items.")
     for row in rows:
       submission = reddit.submission(row[1])
+      logging.info(f"{row[1]}")
       if submission.title:
         logging.info(f"{submission.id} - {submission.title}")
       else:
