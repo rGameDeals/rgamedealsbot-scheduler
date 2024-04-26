@@ -97,8 +97,8 @@ def runjob():
           con.commit()
           logging.info("skipping https://reddit.com/" + row[1])
       except:
-        logging.info("error accessing reddit, sleeping 60 seconds")
-        time.sleep(60)
+        logging.info("error accessing reddit, sleeping 10 seconds")
+        time.sleep(10)
 
 
 
