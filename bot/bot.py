@@ -64,9 +64,12 @@ def runjob():
       try:
         submission = reddit.submission(row[1])
         logging.info(f"{row[1]}")
-        if submission.title:
-          logging.info(f"{submission.id} - {submission.title}")
-        else:
+        try:
+          if submission.title:
+            logging.info(f"{submission.id} - {submission.title}")
+          else:
+            logging.info(f"{submission.id} - title error?")
+        except:
           logging.info(f"{submission.id} - title error?")
         #logging.info( submission.removed_by_category )
         if submission.removed_by_category is None and submission.author is not None and submission.banned_by is None:
