@@ -106,5 +106,8 @@ runjob()
 logging.info("starting bot....")
 
 while 1:
-    schedule.run_pending()
-    time.sleep(30)
+    try:
+      schedule.run_pending()
+      time.sleep(30)
+    except:
+      sleep(60)
