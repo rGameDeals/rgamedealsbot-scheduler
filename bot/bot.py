@@ -61,42 +61,44 @@ def runjob():
     cnt = str(len(rows))
     logging.info("processing schedule for " + cnt + " items.")
     for row in rows:
-      submission = reddit.submission(row[1])
-      logging.info(f"{row[1]}")
-      if submission.title:
-        logging.info(f"{submission.id} - {submission.title}")
-      else:
-        logging.info(f"{submission.id} - title error?")
-      #logging.info( submission.removed_by_category )
-      if submission.removed_by_category is None and submission.author is not None and submission.banned_by is None:
-       if submission.link_flair_text is None or ("preorder" not in submission.link_flair_text.lower() and "pre-order" not in submission.link_flair_text.lower() and "preorder" not in submission.title.lower() and "pre-order" not in submission.title.lower()):
-        if not submission.spoiler:
-               #if "expired" not in submission.link_flair_text.lower():
-            logging.info("running schedule on https://reddit.com/" + row[1])
-            submission.mod.spoiler()
-            flairtime = str( int(time.time()))
-            cursorObj = con.cursor()
-            cursorObj.execute('DELETE FROM schedules WHERE postid = %s', (row[1],))
-            cursorObj.execute('INSERT INTO flairs(postid, flairtext, timeset) VALUES(%s,%s,%s)', (submission.id,submission.link_flair_text,flairtime)  )
-            con.commit()
-            submission.mod.flair(text='Expired', css_class='expired')
+      try:
+        submission = reddit.submission(row[1])
+        logging.info(f"{row[1]}")
+        if submission.title:
+          logging.info(f"{submission.id} - {submission.title}")
         else:
-         logging.info("removing orphaned schedule")
-         cursorObj = con.cursor()
-         cursorObj.execute('DELETE FROM schedules WHERE postid = %s', (row[1],))
-         con.commit()
-       else:
-        cursorObj = con.cursor()
-        cursorObj.execute('DELETE FROM schedules WHERE postid = %s', (row[1],))
-        con.commit()
-        logging.info("skipping https://reddit.com/" + row[1])
-      else:
-        cursorObj = con.cursor()
-        cursorObj.execute('DELETE FROM schedules WHERE postid = %s', (row[1],))
-        con.commit()
-        logging.info("skipping https://reddit.com/" + row[1])
-
-
+          logging.info(f"{submission.id} - title error?")
+        #logging.info( submission.removed_by_category )
+        if submission.removed_by_category is None and submission.author is not None and submission.banned_by is None:
+         if submission.link_flair_text is None or ("preorder" not in submission.link_flair_text.lower() and "pre-order" not in submission.link_flair_text.lower() and "preorder" not in submission.title.lower() and "pre-order" not in submission.title.lower()):
+          if not submission.spoiler:
+                 #if "expired" not in submission.link_flair_text.lower():
+              logging.info("running schedule on https://reddit.com/" + row[1])
+              submission.mod.spoiler()
+              flairtime = str( int(time.time()))
+              cursorObj = con.cursor()
+              cursorObj.execute('DELETE FROM schedules WHERE postid = %s', (row[1],))
+              cursorObj.execute('INSERT INTO flairs(postid, flairtext, timeset) VALUES(%s,%s,%s)', (submission.id,submission.link_flair_text,flairtime)  )
+              con.commit()
+              submission.mod.flair(text='Expired', css_class='expired')
+          else:
+           logging.info("removing orphaned schedule")
+           cursorObj = con.cursor()
+           cursorObj.execute('DELETE FROM schedules WHERE postid = %s', (row[1],))
+           con.commit()
+         else:
+          cursorObj = con.cursor()
+          cursorObj.execute('DELETE FROM schedules WHERE postid = %s', (row[1],))
+          con.commit()
+          logging.info("skipping https://reddit.com/" + row[1])
+        else:
+          cursorObj = con.cursor()
+          cursorObj.execute('DELETE FROM schedules WHERE postid = %s', (row[1],))
+          con.commit()
+          logging.info("skipping https://reddit.com/" + row[1])
+      except:
+        logging.info("error accessing reddit, sleeping 60 seconds")
+        time.sleep(60)
 
 
 
@@ -106,8 +108,5 @@ runjob()
 logging.info("starting bot....")
 
 while 1:
-    try:
       schedule.run_pending()
       time.sleep(30)
-    except:
-      sleep(60)
