@@ -12,12 +12,6 @@ import pymysql
 os.environ['TZ'] = 'UTC'
 
 
-con = pymysql.connect(
-    host=os.environ['MYSQL_HOST'],
-    user=os.environ['MYSQL_USER'],
-    passwd=os.environ['MYSQL_PASS'],
-    db=os.environ['MYSQL_DB']
-)
 
 REDDIT_CID=os.environ['REDDIT_CID']
 REDDIT_SECRET=os.environ['REDDIT_SECRET']
@@ -52,7 +46,13 @@ logging.info("starting scheduler...")
 
 
 def runjob():
-  con.ping(reconnect=True)
+  con = pymysql.connect(
+    host=os.environ['MYSQL_HOST'],
+    user=os.environ['MYSQL_USER'],
+    passwd=os.environ['MYSQL_PASS'],
+    db=os.environ['MYSQL_DB']
+  )
+  #con.ping(reconnect=True)
   tm = str(int(time.time()))
   cursorObj = con.cursor()
   cursorObj.execute('SELECT * FROM schedules WHERE schedtime <= %s ORDER BY schedtime DESC LIMIT 0,50;', (tm,))
@@ -102,7 +102,7 @@ def runjob():
       except:
         logging.info("error accessing reddit, sleeping 10 seconds")
         time.sleep(10)
-
+  con.close()
 
 
 schedule.every(1).minutes.do(runjob)
